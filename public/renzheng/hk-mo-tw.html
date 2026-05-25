@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>访问认证</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .status {
+            font-size: 18px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .success {
+            color: #009688;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .loading {
+            color: #667eea;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.3;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .tip {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 class="title">访问认证系统</h1>
+        <p id="status" class="status loading">正在检测您的访问地区，请稍候...</p>
+        <a id="enterBtn" class="btn hide">获取验证码</a>
+        <p class="tip">本服务仅对中国港澳台地区开放</p>
+    </div>
+
+    <script>
+        // 页面加载完成后自动检测IP地区
+        window.addEventListener('DOMContentLoaded', checkRegion);
+
+        async function checkRegion() {
+            const statusEl = document.getElementById('status');
+            const enterBtn = document.getElementById('enterBtn');
+            
+            try {
+                // 调用免费IP地理定位接口（无跨域限制，无需密钥）
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                
+                // 获取国家/地区代码
+                const country = data.country_code; // CN=中国大陆, HK=香港, MO=澳门, TW=台湾
+                
+                // 允许访问的地区列表
+                const allowedRegions = ['HK', 'MO', 'TW'];
+                
+                if (allowedRegions.includes(country)) {
+                    // 中国大陆及港澳台用户 → 允许访问
+                    statusEl.textContent = `认证通过！您当前所在地区：${data.region || data.country_name}`;
+                    statusEl.className = 'status success';
+                    enterBtn.classList.remove('hide');
+                    // 点击按钮跳转到你的目标页面
+                    enterBtn.href = 'https://open.techgrow.cn/#/readmore/captcha/generate?blogId=57594-4392763476021-306'; 
+                } else {
+                    // 境外用户 → 拦截访问
+                    statusEl.textContent = `访问受限！当前地区：${data.country_name}
+本服务仅对中国港澳台地区开放`;
+                    statusEl.className = 'status error';
+                }
+                
+            } catch (error) {
+                // 检测失败处理
+                statusEl.textContent = '地区检测失败，请刷新页面重试';
+                statusEl.className = 'status error';
+            }
+        }
+    </script>
+</body>
+</html>
