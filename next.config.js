@@ -442,6 +442,8 @@ const nextConfig = {
   }
   ,
   experimental: {
+    // 禁用 webpack 文件缓存
+    cacheHandler: undefined,
     // cpus: 1,
     scrollRestoration: true,
     // 性能优化实验性功能
