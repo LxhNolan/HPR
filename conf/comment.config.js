@@ -4,7 +4,7 @@
  */
 module.exports = {
   COMMENT_HIDE_SINGLE_TAB:
-    process.env.NEXT_PUBLIC_COMMENT_HIDE_SINGLE_TAB || false, // Whether hide the tab when there's no tabs. 只有一个评论组件时是否隐藏切换组件的标签页
+    process.env.NEXT_PUBLIC_COMMENT_HIDE_SINGLE_TAB || true, // Whether hide the tab when there's no tabs. 只有一个评论组件时是否隐藏切换组件的标签页
 
   // NotionComments: use a Notion database as comment storage
   COMMENT_NOTION_ENABLE:
@@ -25,7 +25,7 @@ module.exports = {
     process.env.NEXT_PUBLIC_COMMENT_TWIKOO_COUNT_ENABLE || false, // 博客列表是否显示评论数
   COMMENT_TWIKOO_CDN_URL:
     process.env.NEXT_PUBLIC_COMMENT_TWIKOO_CDN_URL ||
-    'https://s4.zstatic.net/npm/twikoo@1.7.9/dist/twikoo.min.js', // twikoo客户端cdn
+    'https://s4.zstatic.net/npm/twikoo@1.7.14/dist/twikoo.min.js', // twikoo客户端cdn
 
   // utterance
   COMMENT_UTTERRANCES_REPO:
